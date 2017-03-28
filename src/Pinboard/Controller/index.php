@@ -43,7 +43,7 @@ $index->get('/', function() use ($app) {
             a.server_name
     ';
 
-    $stmt = $app['db']->executeCacheQuery($sql, $params, array(), new QueryCacheProfile(10 * 60));
+    $stmt = $app['db']->executeCacheQuery($sql, $params, array(), new QueryCacheProfile(5 * 60));
     $result['servers'] = $stmt->fetchAll();
     $stmt->closeCursor();
 
