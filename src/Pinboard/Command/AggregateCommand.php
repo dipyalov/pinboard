@@ -321,9 +321,11 @@ class AggregateCommand extends Command
                     ru_utime_total, ru_utime_percent, ru_utime_per_sec,
                     ru_stime_total, ru_stime_percent, ru_stime_per_sec,
                     traffic_total, traffic_percent, traffic_per_sec,
-                    hostname, req_time_median, p85, p95, p99, \'' . $now . '\' FROM ipm_pinba_report_by_hostname_90_95_99;
+                    hostname, req_time_median, \'0.0\', p95, p99, \'' . $now . '\' FROM ipm_pinba_report_by_hostname_90_95_99;
         ';
-        echo $sql . PHP_EOL;
+        // p90 ==> '0.0'
+        // [PDOException] SQLSTATE[01000]: Warning: 1265 Data truncated for column 'p90' at row 2
+        //echo $sql . PHP_EOL;
         $db->query($sql);
         $sql = '
             INSERT INTO ipm_report_by_hostname_and_server
