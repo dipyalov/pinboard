@@ -322,7 +322,10 @@ class AggregateCommand extends Command
                     ru_stime_total, ru_stime_percent, ru_stime_per_sec,
                     traffic_total, traffic_percent, traffic_per_sec,
                     hostname, req_time_median, p90, p95, p99, \'' . $now . '\' FROM ipm_pinba_report_by_hostname_90_95_99;
-
+        ';
+        echo $sql . PHP_EOL;
+        $db->query($sql);
+        $sql = '
             INSERT INTO ipm_report_by_hostname_and_server
                 (
                     req_count, req_per_sec, req_time_total, req_time_percent, req_time_per_sec,
@@ -336,7 +339,9 @@ class AggregateCommand extends Command
                     ru_stime_total, ru_stime_percent, ru_stime_per_sec,
                     traffic_total, traffic_percent, traffic_per_sec,
                     hostname, server_name, req_time_median, p90, p95, p99, \'' . $now . '\' FROM ipm_pinba_report_by_hostname_and_server_90_95_99;
-
+        ';
+        $db->query($sql);
+        $sql = '
             INSERT INTO ipm_report_by_server_name
                 (
                     req_count, req_per_sec, req_time_total, req_time_percent, req_time_per_sec,
