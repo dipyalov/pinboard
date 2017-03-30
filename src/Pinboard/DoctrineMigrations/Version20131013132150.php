@@ -32,26 +32,6 @@ class Version20131013132150 extends AbstractMigration
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
         ");
         $this->addSql("
-            CREATE TABLE IF NOT EXISTS `ipm_report_by_hostname` (
-              `req_count` int(11) DEFAULT NULL,
-              `req_per_sec` float DEFAULT NULL,
-              `req_time_total` float DEFAULT NULL,
-              `req_time_percent` float DEFAULT NULL,
-              `req_time_per_sec` float DEFAULT NULL,
-              `ru_utime_total` float DEFAULT NULL,
-              `ru_utime_percent` float DEFAULT NULL,
-              `ru_utime_per_sec` float DEFAULT NULL,
-              `ru_stime_total` float DEFAULT NULL,
-              `ru_stime_percent` float DEFAULT NULL,
-              `ru_stime_per_sec` float DEFAULT NULL,
-              `traffic_total` float DEFAULT NULL,
-              `traffic_percent` float DEFAULT NULL,
-              `traffic_per_sec` float DEFAULT NULL,
-              `hostname` varchar(32) DEFAULT NULL,
-              `created_at` timestamp DEFAULT CURRENT_TIMESTAMP
-            ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='ipm_report3';
-        ");
-        $this->addSql("
             CREATE TABLE IF NOT EXISTS `ipm_report_by_hostname_and_server` (
               `req_count` int(11) DEFAULT NULL,
               `req_per_sec` float DEFAULT NULL,
@@ -136,7 +116,6 @@ class Version20131013132150 extends AbstractMigration
     public function down(Schema $schema)
     {
         $this->addSql("DROP TABLE `ipm_report_2_by_hostname_and_server`;");
-        $this->addSql("DROP TABLE `ipm_report_by_hostname`;");
         $this->addSql("DROP TABLE `ipm_report_by_hostname_and_server`;");
         $this->addSql("DROP TABLE `ipm_report_by_server_name`;");
         $this->addSql("DROP TABLE `ipm_status_details`;");

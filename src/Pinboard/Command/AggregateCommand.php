@@ -155,7 +155,9 @@ class AggregateCommand extends Command
             return;
         }
 
-        if(file_exists( __FILE__ . '.lock')) {
+        $interval = new \DateInterval($this->params['aggregation_period']);
+        $delta = ($interval->h ? $interval->h * 3600 : 0) + ($interval->i ? $interval->i * 60 : 0) + ($interval->s ? : 0);
+        if(file_exists( __FILE__ . '.lock') && filemtime(__FILE__ . '.lock') < time() - $delta) {
             $output->writeln('<error>Cannot run data aggregation: the another instance of this script is already executing. Otherwise, remove ' . __FILE__ . '.lock file</error>');
 
             if ($this->mailer && isset($this->params['notification']['global_email'])) {
@@ -192,7 +194,6 @@ class AggregateCommand extends Command
 
         $tablesForClear = array(
             "ipm_report_2_by_hostname_and_server",
-            "ipm_report_by_hostname",
             "ipm_report_by_hostname_and_server",
             "ipm_report_by_server_name",
             "ipm_req_time_details",
@@ -308,25 +309,6 @@ class AggregateCommand extends Command
 
         $db->executeQuery('COMMIT');
 
-        $sql = '
-            INSERT INTO ipm_report_by_hostname
-                (
-                    req_count, req_per_sec, req_time_total, req_time_percent, req_time_per_sec,
-                    ru_utime_total, ru_utime_percent, ru_utime_per_sec,
-                    ru_stime_total, ru_stime_percent, ru_stime_per_sec,
-                    traffic_total, traffic_percent, traffic_per_sec,
-                    hostname, req_time_median, p90, p95, p99, created_at
-                )
-            SELECT req_count, req_per_sec, req_time_total, req_time_percent, req_time_per_sec,
-                    ru_utime_total, ru_utime_percent, ru_utime_per_sec,
-                    ru_stime_total, ru_stime_percent, ru_stime_per_sec,
-                    traffic_total, traffic_percent, traffic_per_sec,
-                    hostname, req_time_median, \'0.0\', p95, p99, \'' . $now . '\' FROM ipm_pinba_report_by_hostname_90_95_99;
-        ';
-        // p90 ==> '0.0'
-        // [PDOException] SQLSTATE[01000]: Warning: 1265 Data truncated for column 'p90' at row 2
-        //echo $sql . PHP_EOL;
-        $db->query($sql);
         $sql = '
             INSERT INTO ipm_report_by_hostname_and_server
                 (
