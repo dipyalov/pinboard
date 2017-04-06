@@ -9,7 +9,7 @@ use Pinboard\Stopwatch\Stopwatch;
 
 $app = new Silex\Application();
 $app['params'] = Symfony\Component\Yaml\Yaml::parse(file_get_contents(__DIR__.'/../config/parameters.yml'));
-date_default_timezone_set($app['timezone']);
+date_default_timezone_set($app['params']['timezone']);
 
 $app->register(new Silex\Provider\SessionServiceProvider());
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
