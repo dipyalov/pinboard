@@ -157,7 +157,7 @@ class AggregateCommand extends Command
 
         $interval = new \DateInterval($this->params['aggregation_period']);
         $delta = ($interval->h ? $interval->h * 3600 : 0) + ($interval->i ? $interval->i * 60 : 0) + ($interval->s ? : 0);
-        if(file_exists( __FILE__ . '.lock') && filemtime(__FILE__ . '.lock') < time() - $delta) {
+        if(file_exists( __FILE__ . '.lock') && time() - $delta < filemtime(__FILE__ . '.lock')) {
             $output->writeln('<error>Cannot run data aggregation: the another instance of this script is already executing. Otherwise, remove ' . __FILE__ . '.lock file</error>');
 
             if ($this->mailer && isset($this->params['notification']['global_email'])) {
