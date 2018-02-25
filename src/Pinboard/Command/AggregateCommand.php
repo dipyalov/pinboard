@@ -454,7 +454,7 @@ class AggregateCommand extends Command
             INSERT INTO
                 ipm_status_details (server_name, hostname, script_name, status, tags, tags_cnt, created_at)
             SELECT
-                server_name, hostname, script_name, status, tags, tags_cnt, FROM_UNIXTIME(max(timestamp))
+                server_name, hostname, script_name, max(status), max(tags), max(tags_cnt), FROM_UNIXTIME(max(timestamp))
             FROM
                 request
             WHERE
