@@ -25,9 +25,12 @@
   </li>
   <li class="{{ (app.request.get('_route') == 'server_cpu_usage') ? 'active' : '' }}">
     <a href="{{ path('server_cpu_usage', p) }}">CPU peak usage</a>
-  </li>
+  </li>  
   <li class="{{ (app.request.get('_route') == 'server_statuses') ? 'active' : '' }}">
     <a href="{{ path('server_statuses', p) }}">Statuses</a>
+  </li>
+  <li class="{{ (app.request.get('_route') == 'server_requests') ? 'active' : '' }}">
+    <a href="{{ path('server_requests', p) }}">Requests <i class="icon-signal"></i></a>
   </li>
   <li class="{{ app.request.get('_route') == 'server_timers' ? 'active' : '' }}">
     <a href="{{ path('server_timers', p) }}">Timers <i class="icon-time"></i></a>

@@ -28,7 +28,7 @@
             </tr>
             {% for page in pages %}
             <tr class="{{ page.mem_peak_usage >= 50000 ? 'error' : (page.mem_peak_usage >= 30000 ? 'warning' : '') }}">
-              <td>{{ page.hostname }}</a></td>
+              <td>{{ page.hostname }}</td>
               <td>
                 <a class="script-name" href="http://{{ page.server_name ~ page.script_name }}" title="">{{ page.script_name }}</a>
                 {% for k, v in page.tags %}

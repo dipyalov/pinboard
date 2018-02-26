@@ -2,8 +2,6 @@
 
 require_once __DIR__.'/../vendor/autoload.php';
 
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Pinboard\Logger\DbalLogger;
 use Pinboard\Stopwatch\Stopwatch;
 
@@ -15,7 +13,7 @@ $app->register(new Silex\Provider\SessionServiceProvider());
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
     'twig.path' => __DIR__.'/../views',
 ));
-$app['twig'] = $app->share($app->extend('twig', function($twig, $app) {
+$app['twig'] = $app->share($app->extend('twig', function ($twig, $app) {
     if (!isset($app['params']['base_url']) || empty($app['params']['base_url'])) {
         $baseUrl = '/';
     } else {
@@ -32,12 +30,11 @@ $app['twig'] = $app->share($app->extend('twig', function($twig, $app) {
 
 $app->register(new Silex\Provider\UrlGeneratorServiceProvider());
 
-
 $dbOptions = array(
-    'driver'   => 'pdo_mysql',
-    'dbname'   => $app['params']['db']['name'],
-    'host'     => $app['params']['db']['host'],
-    'user'     => $app['params']['db']['user'],
+    'driver' => 'pdo_mysql',
+    'dbname' => $app['params']['db']['name'],
+    'host' => $app['params']['db']['host'],
+    'user' => $app['params']['db']['user'],
     'password' => $app['params']['db']['pass'],
 );
 if (isset($app['params']['db']['port'])) {
@@ -52,11 +49,11 @@ $app['dbs.config']['default']->setSQLLogger(new DbalLogger(new Stopwatch(), $app
 
 //query caching
 $cacheClassName =
-    'Doctrine\\Common\\Cache\\' .
+    'Doctrine\\Common\\Cache\\'.
     (isset($app['params']['cache']) ?
         Doctrine\Common\Util\Inflector::classify($app['params']['cache']) :
         'Array'
-    ) .
+    ).
     'Cache'
     ;
 
@@ -66,7 +63,7 @@ $users = array();
 if (isset($app['params']['secure']['users'])) {
     foreach ($app['params']['secure']['users'] as $userName => $userData) {
         $users[$userName] = array(
-                "ROLE_USER",
+                'ROLE_USER',
                 $userData['password'],
             );
     }
@@ -76,10 +73,10 @@ if (isset($app['params']['secure']['enable']) && $app['params']['secure']['enabl
     $app->register(new Silex\Provider\SecurityServiceProvider(), array(
         'security.firewalls' => array(
             'secure_area' => array(
-                'pattern' => "^/",
+                'pattern' => '^/',
                 'http' => true,
                 'users' => $users,
             ),
-        )
+        ),
     ));
 }

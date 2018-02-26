@@ -1,3 +1,4 @@
+debug :false
 db:
     host: localhost
     port: 3306
@@ -8,6 +9,7 @@ db:
 
 timezone: UTC
 base_url: /
+route_prefix: /
 #base_url: /pinboard/
 #base_url: http://your-host.com/pinboard
 logging:

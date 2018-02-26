@@ -1,0 +1,70 @@
+{% extends "base.html.twig" %}
+
+{% block title %}{{ title }} — {{ parent() }}{% endblock %}
+{% block content %}
+    {% include '_server_menu.html.twig' with { title: title, server_name: server_name, hostname: hostname, hosts: hosts } %}
+    <div class="row">
+      <div class="span12">
+        <p class="lead">Request statistics</p>
+        {% if requests|length > 0 %}
+         <table class="table table-bordered table-hover table-striped">
+            <tr>
+              <th class="hostname">Host name
+                  <a href="{{ path('server_requests', { serverName: server_name, hostName: hostname, colOrder: 'host', colDir: 'asc' }) }}"><i class=" icon-chevron-up"></i></a>
+                  <a href="{{ path('server_requests', { serverName: server_name, hostName: hostname, colOrder: 'host', colDir: 'desc' }) }}"><i class=" icon-chevron-down"></i></a>
+               </th>
+              <th>Script name
+                  <a href="{{ path('server_requests', { serverName: server_name, hostName: hostname, colOrder: 'script', colDir: 'asc' }) }}"><i class=" icon-chevron-up"></i></a>
+                  <a href="{{ path('server_requests', { serverName: server_name, hostName: hostname, colOrder: 'script', colDir: 'desc' }) }}"><i class=" icon-chevron-down"></i></a>
+              </th>
+              <th>Time, %
+                  <a href="{{ path('server_requests', { serverName: server_name, hostName: hostname, colOrder: 'time', colDir: 'asc' }) }}"><i class=" icon-chevron-up"></i></a>
+                  <a href="{{ path('server_requests', { serverName: server_name, hostName: hostname, colOrder: 'time', colDir: 'desc' }) }}"><i class=" icon-chevron-down"></i></a>
+              </th>
+              <th>RPM
+                  <a href="{{ path('server_requests', { serverName: server_name, hostName: hostname, colOrder: 'rpm', colDir: 'asc' }) }}"><i class=" icon-chevron-up"></i></a>
+                  <a href="{{ path('server_requests', { serverName: server_name, hostName: hostname, colOrder: 'rpm', colDir: 'desc' }) }}"><i class=" icon-chevron-down"></i></a>
+              </th>
+              <th>50%, ms
+                  <a href="{{ path('server_requests', { serverName: server_name, hostName: hostname, colOrder: '50', colDir: 'asc' }) }}"><i class=" icon-chevron-up"></i></a>
+                  <a href="{{ path('server_requests', { serverName: server_name, hostName: hostname, colOrder: '50', colDir: 'desc' }) }}"><i class=" icon-chevron-down"></i></a>
+              </th>
+              <th>90%, ms
+                  <a href="{{ path('server_requests', { serverName: server_name, hostName: hostname, colOrder: '90', colDir: 'asc' }) }}"><i class=" icon-chevron-up"></i></a>
+                  <a href="{{ path('server_requests', { serverName: server_name, hostName: hostname, colOrder: '90', colDir: 'desc' }) }}"><i class=" icon-chevron-down"></i></a>
+              </th>
+              <th>95%, ms
+                  <a href="{{ path('server_requests', { serverName: server_name, hostName: hostname, colOrder: '95', colDir: 'asc' }) }}"><i class=" icon-chevron-up"></i></a>
+                  <a href="{{ path('server_requests', { serverName: server_name, hostName: hostname, colOrder: '95', colDir: 'desc' }) }}"><i class=" icon-chevron-down"></i></a>
+              </th>
+              <th>99%, ms
+                  <a href="{{ path('server_requests', { serverName: server_name, hostName: hostname, colOrder: '99', colDir: 'asc' }) }}"><i class=" icon-chevron-up"></i></a>
+                  <a href="{{ path('server_requests', { serverName: server_name, hostName: hostname, colOrder: '99', colDir: 'desc' }) }}"><i class=" icon-chevron-down"></i></a>
+              </th>
+              {#<th class="date">Date
+                  <a href="{{ path('server_req_time', { serverName: server_name, hostName: hostname, pageNum: 'page1', colOrder: 'date', colDir: 'asc' }) }}"><i class=" icon-chevron-up"></i></a>
+                  <a href="{{ path('server_req_time', { serverName: server_name, hostName: hostname, pageNum: 'page1', colOrder: 'date', colDir: 'desc' }) }}"><i class=" icon-chevron-down"></i></a>
+              </th>#}
+            </tr>
+            {% for request in requests %}
+            <tr {#class="{{ page.req_time >= 2000 ? 'error' : (page.req_time >= 1000 ? 'warning' : '') }}#}">
+              <td>{{ request.hostname }}</td>
+              <td>
+                <a class="script-name" href="http://{{ request.server_name ~ request.script_name }}" title="">{{ request.script_name }}</a>                
+              </td>
+              <td>{{ request.req_time_percent }}</td>
+              <td>{{ request.req_per_sec * 60 }}</td>
+              <td>{{ request.req_time_median * 1000 }}</td>
+              <td>{{ request.p90  * 1000 }}</td>
+              <td>{{ request.p95  * 1000 }}</td>
+              <td>{{ request.p99  * 1000 }}</td>
+            </tr>
+            {% endfor %}
+          </table>                    
+        {% else %}
+        <p>No requests statistics available.</p>
+        {% endif %}
+      </div>
+    </div>
+{% endblock %}
+
